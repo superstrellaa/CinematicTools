@@ -1,0 +1,89 @@
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'com.modrinth.minotaur' version '2.+'
+    id 'com.matthewprenger.cursegradle' version '1.4+'
+    id 'fabric-loom' version '1.6-SNAPSHOT'
+}
+
+version = "${project.mod_version}+${project.minecraft_version}"
+group= "studio.dolphinproductions.utils" + project.mod_id
+
+//project.evaluationDependsOn(":CreativeCore")
+
+repositories {
+    mavenLocal()
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven {
+        url "https://mvn.devos.one/releases/"
+    }
+
+    maven {
+        name = "JitPack"
+        url = "https://jitpack.io/"
+    }
+
+    maven {
+        name = "Cafeteria Dev"
+        url = "https://maven.cafeteria.dev/releases/"
+    }
+
+    maven {
+        name = "JamiesWhiteShirt Dev"
+        url = "https://maven.jamieswhiteshirt.com/libs-release"
+        content {
+            includeGroup("com.jamieswhiteshirt")
+        }
+    }
+
+    maven {
+        name = 'GeckoLib'
+        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        content {
+            includeGroupByRegex("software\\.bernie.*")
+            includeGroup("com.eliotlash.mclib")
+        }
+    }
+
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+
+    implementation 'com.google.code.gson:gson:2.8.9'
+
+    modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+    //implementation project(':CreativeCore')
+    //minecraftLibrary fg.deobf("curse.maven:minema-resurrection-596719:4816846")
+    modImplementation "curse.maven:creativecore-257814:5281984"
+
+    modImplementation("software.bernie.geckolib:geckolib-fabric-${project.minecraft_version}:${project.geckolib_version}")
+    implementation("com.eliotlash.mclib:mclib:20")
+}
+
+processResources {
+    inputs.property "version", project.mod_version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.mod_version
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+def modDependencies = [
+    [ modId: "creativecore", type: "required", ordering: "NONE", side: "BOTH", versionRange: "[" + creativecore_version + ",)" ]
+]
+def modMixins = [ "cinematictools.mixins.json" ]

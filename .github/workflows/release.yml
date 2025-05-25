@@ -1,0 +1,33 @@
+name: Build and publish mod
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Build the mod
+        run: ./gradlew build
+
+      - name: Upload to Modrinth and CurseForge
+        uses: LaytonGB/mod-publisher-action@v1.4
+        with:
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          modrinth-id: cinematictools
+          curseforge-id: 1273120
+          files: build/libs/*.jar
