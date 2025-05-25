@@ -28,6 +28,6 @@ jobs:
         with:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          modrinth-id: cinematictools
+          modrinth-id: I3kzp1h1
           curseforge-id: 1273120
           files: build/libs/*.jar
