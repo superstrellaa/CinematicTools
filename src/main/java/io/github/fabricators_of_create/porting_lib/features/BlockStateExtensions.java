@@ -8,8 +8,7 @@ import net.minecraft.world.phys.Vec3;
 
 public interface BlockStateExtensions {
     /**
-     * Used to determine the state 'viewed' by an entity (see
-     * {@link Camera#getBlockAtCamera()}).
+     * Used to determine the state 'viewed' by an entity
      * Can be used by fluid blocks to determine if the viewpoint is within the fluid or not.
      *
      * @param level     the level

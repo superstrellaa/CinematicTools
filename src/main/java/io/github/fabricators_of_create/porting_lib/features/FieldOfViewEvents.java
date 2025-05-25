@@ -22,7 +22,6 @@ public class FieldOfViewEvents {
 
     /**
      * Modify the computed base field of view.
-     * This is invoked by {@link GameRenderer#getFov(Camera, float, boolean)} after all vanilla effects have been applied.
      * This event is chained and not cancelled - all listeners get a chance to modify the FOV.
      */
     public static final Event<Compute> COMPUTE = EventFactory.createArrayBacked(Compute.class, callbacks -> (renderer, camera, partialTicks, usedFovSetting, fov) -> {
