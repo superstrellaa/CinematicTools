@@ -26,8 +26,5 @@ jobs:
       - name: Upload to Modrinth and CurseForge
         uses: LaytonGB/mod-publisher-action@v1.4
         with:
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          modrinth-id: I3kzp1h1
-          curseforge-id: 1273120
-          files: build/libs/*.jar
+          name: mod-jar
+          path: build/libs/*.jar
