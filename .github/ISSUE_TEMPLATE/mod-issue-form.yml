@@ -1,0 +1,79 @@
+name: Mod Issue
+description: Report a bug, mod incompatibility, or suggest a new feature.
+labels: ["triage"]
+body:
+  - type: dropdown
+    id: type
+    attributes:
+      label: Issue Type
+      description: Select what kind of issue you're reporting.
+      options:
+        - Bug Report 🐛
+        - Mod Incompatibility ⚠️
+        - Feature Request 💡
+    validations:
+      required: true
+
+  - type: input
+    id: mod-version
+    attributes:
+      label: Mod Version
+      placeholder: "e.g. 1.1.0+1.21"
+    validations:
+      required: true
+
+  - type: input
+    id: mc-version
+    attributes:
+      label: Minecraft Version
+      placeholder: "e.g. 1.21"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      placeholder: "Clearly explain the bug, issue, or feature idea."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce (if applicable)
+      description: Only for bug reports or incompatibilities.
+      placeholder: |
+        1. Launch Minecraft
+        2. Create or open a world
+        3. Activate Outside Mode...
+        4. ...
+      render: markdown
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or Errors (if applicable)
+      description: Paste any related errors or logs here.
+      placeholder: |
+        [19:13:27] [main/ERROR]: ...
+      render: text
+
+  - type: textarea
+    id: modlist
+    attributes:
+      label: Mod List (only for incompatibility)
+      description: Include other installed mods if you're reporting a compatibility issue.
+      placeholder: |
+        - modrinth-mod-x 1.0.0
+        - creativecore 2.9.5
+        - ...
+      render: text
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: I have checked that this issue was not already reported.
+          required: true
