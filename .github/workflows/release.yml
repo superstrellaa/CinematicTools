@@ -1,12 +1,16 @@
-name: Build and publish mod
+name: Build mod
 
 on:
-  release:
-    types: [published]
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - fabric/*
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -23,11 +27,8 @@ jobs:
       - name: Build the mod
         run: ./gradlew build
 
-      - name: Upload to Modrinth and CurseForge
-        uses: LaytonGB/mod-publisher-action@v1.4
+      - name: Upload mod jar
+        uses: actions/upload-artifact@v4
         with:
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          modrinth-id: I3kzp1h1
-          curseforge-id: 1273120
-          files: build/libs/*.jar
+          name: mod-jar
+          path: build/libs/*.jar

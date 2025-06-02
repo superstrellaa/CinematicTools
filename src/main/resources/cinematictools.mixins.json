@@ -1,23 +1,23 @@
 {
     "required": true,
-    "package": "studio.dolphinproductions.utils.cinematictools.client.mixin",
+    "package": "es.superstrellaa.cinematictools.client.mixin",
     "compatibilityLevel": "JAVA_17",
     "server": [
     ],
     "mixins": [
-        "LocalCoordinatesAccessor",
-        "MinecraftAccessor",
-        "WorldCoordinatesAccessor"
+      "LocalCoordinatesAccessor",
+      "MinecraftAccessor",
+      "WorldCoordinatesAccessor"
     ],
     "client": [
-        "hud.GuiMixin",
-        "hud.GameRendererMixin",
-        "hud.MinecraftMixin",
-        "CameraMixin",
-        "CurrentViewEntityMixin",
-        "EntitySelectorMixin",
-        "GameRendererAccessor",
-        "MouseOverMixin"
+      "hud.GuiMixin",
+      "hud.GameRendererMixin",
+      "hud.MinecraftMixin",
+      "CameraMixin",
+      "CurrentViewEntityMixin",
+      "EntitySelectorMixin",
+      "GameRendererAccessor",
+      "MouseOverMixin"
     ],
     "minVersion": "0.8"
 }
