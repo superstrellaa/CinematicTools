@@ -7,7 +7,7 @@ plugins {
 }
 
 version = "${project.mod_version}+${project.minecraft_version}"
-group= "studio.dolphinproductions.utils" + project.mod_id
+group= "es.superstrellaa.cinematictools" + project.mod_id
 
 //project.evaluationDependsOn(":CreativeCore")
 
