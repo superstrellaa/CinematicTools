@@ -1,0 +1,25 @@
+name: Feature Request 💡
+description: Suggest an idea to improve CinematicTools.
+labels: ["enhancement"]
+body:
+  - type: input
+    id: mc-version
+    attributes:
+      label: Target Minecraft Version (if relevant)
+      placeholder: "e.g. 1.20.4"
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Describe the Feature
+      placeholder: "Explain your idea clearly and why it should be added."
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: I checked that this feature hasn’t already been suggested.
+          required: true

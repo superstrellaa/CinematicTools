@@ -1,0 +1,52 @@
+name: Bug Report 🐛
+description: Report a reproducible bug or unexpected behavior.
+labels: ["bug"]
+body:
+  - type: input
+    id: mod-version
+    attributes:
+      label: Mod Version
+      placeholder: "e.g. 1.0.0+1.20.1"
+    validations:
+      required: true
+
+  - type: input
+    id: mc-version
+    attributes:
+      label: Minecraft Version
+      placeholder: "e.g. 1.20.4"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the Bug
+      placeholder: "Clearly explain what the bug is."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      placeholder: |
+        1. Launch Minecraft
+        2. Do this...
+        3. See this error...
+      render: markdown
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or Crash Reports
+      description: Attach logs or crash reports if available.
+      render: text
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: I checked that this issue hasn't been reported yet.
+          required: true
