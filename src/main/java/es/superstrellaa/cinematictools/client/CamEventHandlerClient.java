@@ -51,45 +51,45 @@ import java.util.function.Consumer;
 
 @OnlyIn(Dist.CLIENT)
 public class CamEventHandlerClient {
-    
+
     public static final Minecraft MC = Minecraft.getInstance();
-    
+
     public static final double ZOOM_STEP = 0.005;
     public static final float ROLL_STEP = 1.5F;
     public static final double MAX_FOV = 170;
     public static final double MIN_FOV = 0.1;
     public static final double FOV_RANGE = MAX_FOV - MIN_FOV;
     public static final double FOV_RANGE_HALF = FOV_RANGE / 2;
-    
+
     public static Entity camera = null;
-    
+
     private static double fov = 0;
     private static float roll = 0;
     private static Consumer<CamTarget> selectingTarget = null;
-    
+
     private static boolean renderingHand = false;
     private static boolean skipFov = false;
-    
+
     public static void startSelectionMode(Consumer<CamTarget> selectingTarget) {
         CamEventHandlerClient.selectingTarget = selectingTarget;
     }
-    
+
     public static void resetRoll() {
         roll = 0;
     }
-    
+
     public static float roll() {
         return roll;
     }
-    
+
     public static void roll(float roll) {
         CamEventHandlerClient.roll = roll;
     }
-    
+
     public static void resetFOV() {
         fov = 0;
     }
-    
+
     public static double fovExactVanilla(float partialTickTime) {
         try {
             skipFov = true;
@@ -98,11 +98,11 @@ public class CamEventHandlerClient {
             skipFov = false;
         }
     }
-    
+
     public static double fovExact(float partialTickTime) {
         return fovExactVanilla(partialTickTime) + fov;
     }
-    
+
     public static void fov(double fov) {
         CamEventHandlerClient.fov = fov;
     }
@@ -123,14 +123,14 @@ public class CamEventHandlerClient {
         if (MC.player != null && MC.level != null && !MC.isPaused() && CinematicToolsClient.isPlaying())
             CinematicToolsClient.gameTickPath(MC.level);
     }
-    
+
     private double calculatePointInCurve(double fov) {
         fov -= MIN_FOV;
         fov /= FOV_RANGE_HALF;
         fov = Mth.clamp(fov, 0, 2);
         return Math.asin(fov - 1) / Math.PI + 0.5;
     }
-    
+
     private double transformFov(double x) {
         if (x <= 0)
             return MIN_FOV;
@@ -148,7 +148,7 @@ public class CamEventHandlerClient {
         var renderTickTime = MC.getDeltaFrameTime();
 
         renderingHand = false;
-        
+
         if (MC.player != null && MC.level != null) {
             if (!MC.isPaused()) {
                 if (CinematicToolsClient.isPlaying()) {
@@ -156,7 +156,7 @@ public class CamEventHandlerClient {
                         if (CinematicToolsClient.isPlaying() && !CinematicToolsClient.getScene().mode.outside())
                             CinematicToolsClient.getScene().togglePause();
                     }
-                    
+
                     CinematicToolsClient.renderTickPath(MC.level, renderTickTime);
                 } else {
                     CinematicToolsClient.noTickPath(MC.level, renderTickTime);
@@ -165,25 +165,25 @@ public class CamEventHandlerClient {
                     double currentFov = vanillaFov + fov;
                     double x = calculatePointInCurve(currentFov);
                     double multiplier = MC.player.isCrouching() ? 5 : 1;
-                    
+
                     /*if (KeyHandler.zoomIn.isDown())
                         fov = transformFov(multiplier * timeFactor * -ZOOM_STEP + x) - vanillaFov;
-                    
+
                     if (KeyHandler.zoomOut.isDown())
                         fov = transformFov(multiplier * timeFactor * ZOOM_STEP + x) - vanillaFov;
-                    
+
                     if (KeyHandler.zoomCenter.isDown())
                         resetFOV();*/
-                    
+
                     /*if (KeyHandler.rollLeft.isDown())
                         roll -= timeFactor * ROLL_STEP;
-                    
+
                     if (KeyHandler.rollRight.isDown())
                         roll += timeFactor * ROLL_STEP;
-                    
+
                     if (KeyHandler.rollCenter.isDown())
                         resetRoll();*/
-                    
+
                     while (KeyHandler.pointKey.consumeClick()) {
                         if (!CinematicToolsClient.isOp)
                             MC.player.sendSystemMessage(Component.translatable("commands.permission.failure"));
@@ -200,7 +200,7 @@ public class CamEventHandlerClient {
                         MC.player.sendSystemMessage(Component.translatable("scene.add", CinematicToolsClient.getPoints().size()));
                     }
                 }
-                
+
                 if (KeyHandler.startStop.consumeClick()) {
                     if (CinematicToolsClient.isPlaying())
                         CinematicToolsClient.stop();
@@ -213,7 +213,7 @@ public class CamEventHandlerClient {
                             MC.player.sendSystemMessage(Component.translatable(e.getMessage()));
                         }
                 }
-                
+
                 while (KeyHandler.clearPoint.consumeClick()) {
                     if (!CinematicToolsClient.isOp)
                         MC.player.sendSystemMessage(Component.translatable("commands.permission.failure"));
@@ -248,38 +248,38 @@ public class CamEventHandlerClient {
             return;
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
-            GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.depthMask(false);
         RenderSystem.enableDepthTest();
-        
+
         Vec3 view = MC.gameRenderer.getMainCamera().getPosition();
-        
+
         RenderSystem.setProjectionMatrix(context.projectionMatrix(), VertexSorting.ORTHOGRAPHIC_Z);
         PoseStack mat = RenderSystem.getModelViewStack();
         mat.pushPose();
         mat.setIdentity();
         mat.mulPoseMatrix(context.matrixStack().last().pose());
         mat.translate(-view.x(), -view.y(), -view.z());
-        
+
         RenderSystem.applyModelViewMatrix();
-        
+
         RenderSystem.depthMask(false);
-        
+
         if (CinematicToolsClient.hasTargetMarker()) {
             CamPoint point = CinematicToolsClient.getTargetMarker();
             renderHitbox(mat, MC.renderBuffers().bufferSource().getBuffer(RenderType.lines()),
-                new AABB(point.x - 0.3, point.y - 1.62, point.z - 0.3, point.x + 0.3, point.y + 0.18, point.z + 0.3), MC.player.getEyeHeight(), point, point.calculateViewVector());
+                    new AABB(point.x - 0.3, point.y - 1.62, point.z - 0.3, point.x + 0.3, point.y + 0.18, point.z + 0.3), MC.player.getEyeHeight(), point, point.calculateViewVector());
         }
-        
+
         boolean shouldRender = false;
         for (CamInterpolation movement : CamInterpolation.REGISTRY.values())
             if (movement.isRenderingEnabled) {
                 shouldRender = true;
                 break;
             }
-        
+
         PoseStack pose = new PoseStack();
-        
+
         if (shouldRender && CinematicToolsClient.getPoints().size() > 0) {
             for (int i = 0; i < CinematicToolsClient.getPoints().size(); i++) {
                 CamPoint point = CinematicToolsClient.getPoints().get(i);
@@ -287,16 +287,16 @@ public class CamEventHandlerClient {
                     point = point.copy();
                     point.add(CinematicToolsClient.getTargetMarker());
                 }
-                
+
                 DebugRenderer.renderFilledBox(pose, MC.renderBuffers().bufferSource(), point.x - 0.05, point.y - 0.05, point.z - 0.05, point.x + 0.05, point.y + 0.05,
-                    point.z + 0.05, 1, 1, 1, 1);
+                        point.z + 0.05, 1, 1, 1, 1);
                 DebugRenderer.renderFloatingText(pose, MC.renderBuffers().bufferSource(), (i + 1) + "", point.x + view.x, point.y + 0.2 + view.y, point.z + view.z, -1);
-                
+
                 RenderSystem.depthMask(false);
             }
-            
+
             MC.renderBuffers().bufferSource().endLastBatch();
-            
+
             try {
                 mat.pushPose();
                 //if (CMDCamClient.hasTargetMarker())
@@ -305,20 +305,20 @@ public class CamEventHandlerClient {
                 for (CamInterpolation movement : CamInterpolation.REGISTRY.values())
                     if (movement.isRenderingEnabled)
                         renderPath(pose, movement, scene);
-                    
+
                 mat.popPose();
             } catch (SceneException e) {}
-            
+
         }
-        
+
         mat.popPose();
-        
+
         RenderSystem.applyModelViewMatrix();
         RenderSystem.depthMask(true);
         RenderSystem.enableBlend();
-        
+
     }
-    
+
     public void renderPath(PoseStack mat, CamInterpolation inter, CamScene scene) {
         double steps = 20 * (scene.points.size() - 1);
         RenderSystem.depthMask(true);
@@ -327,20 +327,20 @@ public class CamEventHandlerClient {
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderColor(1, 1, 1, 1);
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        
+
         Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuilder();
-        
+
         RenderSystem.lineWidth(1.0F);
         Vec3d color = inter.color.toVec();
         bufferbuilder.begin(Mode.DEBUG_LINE_STRIP, DefaultVertexFormat.POSITION_COLOR);
         CamPoints points = new CamPoints(scene.points);
-        
+
         if (scene.lookTarget != null)
             scene.lookTarget.start(MC.level);
         if (scene.posTarget != null)
             scene.posTarget.start(MC.level);
-        
+
         double[] times = points.createTimes(scene);
         Interpolation<Vec3d> interpolation = inter.create(times, scene, null, new ArrayList<Vec3d>(scene.points), null, CamAttribute.POSITION);
         for (int i = 0; i < steps; i++) {
@@ -353,28 +353,28 @@ public class CamEventHandlerClient {
         if (CinematicToolsClient.hasTargetMarker())
             last.add(CinematicToolsClient.getTargetMarker());
         bufferbuilder.vertex((float) last.x, (float) last.y, (float) last.z).color((float) color.x, (float) color.y, (float) color.z, 1).endVertex();
-        
+
         tessellator.end();
-        
+
         if (scene.lookTarget != null)
             scene.lookTarget.finish();
         if (scene.posTarget != null)
             scene.posTarget.finish();
     }
-    
+
     private static void renderHitbox(PoseStack pMatrixStack, VertexConsumer pBuffer, AABB aabb, float eyeHeight, Vec3d origin, Vec3d view) {
         LevelRenderer.renderLineBox(pMatrixStack, pBuffer, aabb, 1.0F, 1.0F, 1.0F, 1.0F);
-        
+
         float f = 0.01F;
         LevelRenderer.renderLineBox(pMatrixStack, pBuffer, aabb.minX, aabb.minY + (eyeHeight - f), aabb.minZ, aabb.maxX, aabb.minY + (eyeHeight + f), aabb.maxZ, 1.0F, 0.0F, 0.0F,
-            1.0F);
-        
+                1.0F);
+
         Matrix4f matrix4f = pMatrixStack.last().pose();
         Matrix3f matrix3f = pMatrixStack.last().normal();
         pBuffer.vertex(matrix4f, (float) origin.x, (float) origin.y, (float) origin.z).color(0, 0, 255, 255).normal(matrix3f, (float) view.x, (float) view.y, (float) view.z)
                 .endVertex();
         pBuffer.vertex(matrix4f, (float) (origin.x + view.x * 2), (float) (origin.y + view.y * 2), (float) (origin.z + view.z * 2)).color(0, 0, 255, 255).normal(matrix3f,
-            (float) view.x, (float) view.y, (float) view.z).endVertex();
+                (float) view.x, (float) view.y, (float) view.z).endVertex();
     }
 
     public boolean cameraRoll(CameraSetupCallback.CameraInfo event) {
@@ -398,27 +398,27 @@ public class CamEventHandlerClient {
     public void interact(Player player, Level level, @Nullable BlockPos pos, @Nullable Entity target) {
         if (selectingTarget == null || !level.isClientSide)
             return;
-        
+
         if (target != null) {
             selectingTarget.accept(new CamTarget.EntityTarget((target)));
             player.sendSystemMessage(Component.translatable("scene.look.target.entity", target.getStringUUID()));
             selectingTarget = null;
         }
-        
+
         if (pos != null) {
             selectingTarget.accept(new CamTarget.BlockTarget(pos));
             player.sendSystemMessage(Component.translatable("scene.look.target.pos", pos.toShortString()));
             selectingTarget = null;
         }
     }
-    
+
     public static void setupMouseHandlerBefore() {
         if (CinematicToolsClient.isPlaying() && CinematicToolsClient.getScene().mode instanceof OutsideMode) {
             camera = MC.cameraEntity;
             MC.cameraEntity = MC.player;
         }
     }
-    
+
     public static void setupMouseHandlerAfter() {
         if (CinematicToolsClient.isPlaying() && CinematicToolsClient.getScene().mode instanceof OutsideMode) {
             MC.cameraEntity = camera;

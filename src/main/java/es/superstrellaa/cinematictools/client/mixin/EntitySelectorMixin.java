@@ -30,7 +30,7 @@ import java.util.function.Predicate;
 
 @Mixin(EntitySelector.class)
 public abstract class EntitySelectorMixin implements EntitySelectorClient {
-    
+
     @Shadow
     @Final
     private int maxResults;
@@ -80,20 +80,20 @@ public abstract class EntitySelectorMixin implements EntitySelectorClient {
             throw EntityArgument.ERROR_SELECTORS_NOT_ALLOWED.create();
         }
     }
-    
+
     @Shadow
     private Predicate<Entity> getPredicate(Vec3 vec) {
         return null;
     }
-    
+
     @Shadow
     public abstract boolean isWorldLimited();
-    
+
     @Shadow
     private <T extends Entity> List<T> sortAndLimit(Vec3 vec, List<T> list) {
         return null;
     }
-    
+
     @Override
     public Entity findSingleEntityClient(FabricClientCommandSource source) throws CommandSyntaxException {
         this.checkPermissions(source);
@@ -104,7 +104,7 @@ public abstract class EntitySelectorMixin implements EntitySelectorClient {
             throw EntityArgument.ERROR_NOT_SINGLE_ENTITY.create();
         return list.get(0);
     }
-    
+
     @Override
     public List<? extends Entity> findEntitiesClient(FabricClientCommandSource source) throws CommandSyntaxException {
         this.checkPermissions(source);
@@ -122,22 +122,22 @@ public abstract class EntitySelectorMixin implements EntitySelectorClient {
                     return Lists.newArrayList(entity);
             return Collections.emptyList();
         }
-        
+
         Vec3 vec3 = this.position.apply(source.getPosition());
         Predicate<Entity> predicate = this.getPredicate(vec3);
         if (this.currentEntity)
             return (List<? extends Entity>) (source.getEntity() != null && predicate.test(source.getEntity()) ? Lists.newArrayList(source.getEntity()) : Collections.emptyList());
         List<Entity> list = Lists.newArrayList();
-        
+
         ClientLevel level = (ClientLevel) source.getWorld();
-        
+
         if (this.aabb != null)
             list.addAll(level.getEntities(this.type, this.aabb.move(vec3), predicate));
         else {
             for (Entity entity : level.entitiesForRendering()) {
                 if (predicate.test(entity))
                     list.add(entity);
-                
+
                 for (PartEntity<?> p : ((LevelExtensions)level).getPartEntities()) {
                     Entity t = type.tryCast(p);
                     if (t != null && predicate.test(t))
@@ -147,7 +147,7 @@ public abstract class EntitySelectorMixin implements EntitySelectorClient {
         }
         return this.sortAndLimit(vec3, list);
     }
-    
+
     @Override
     public Player findSinglePlayerClient(FabricClientCommandSource source) throws CommandSyntaxException {
         this.checkPermissions(source);
@@ -156,7 +156,7 @@ public abstract class EntitySelectorMixin implements EntitySelectorClient {
             throw EntityArgument.NO_PLAYERS_FOUND.create();
         return list.get(0);
     }
-    
+
     @Override
     public List<Player> findPlayersClient(FabricClientCommandSource source) throws CommandSyntaxException {
         this.checkPermissions(source);
@@ -169,7 +169,7 @@ public abstract class EntitySelectorMixin implements EntitySelectorClient {
             Player player = source.getWorld().getPlayerByUUID(entityUUID);
             return player == null ? Collections.emptyList() : Lists.newArrayList(player);
         }
-        
+
         Vec3 vec3 = this.position.apply(source.getPosition());
         Predicate<Entity> predicate = this.getPredicate(vec3);
         if (this.currentEntity) {
@@ -177,13 +177,13 @@ public abstract class EntitySelectorMixin implements EntitySelectorClient {
                 return Lists.newArrayList(player);
             return Collections.emptyList();
         }
-        
+
         List<Player> list = Lists.newArrayList();
         for (Player player : source.getWorld().players())
             if (predicate.test(player))
                 list.add(player);
-            
+
         return this.sortAndLimit(vec3, list);
     }
-    
+
 }
