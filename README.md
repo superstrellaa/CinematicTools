@@ -53,7 +53,7 @@ It brings smooth camera paths, actor NPCs, and enhanced cinematic controls to mo
 - Dynamic **skin loading** for NPCs
 - Simple and intuitive **in-game commands**
 
-> Documentation and examples will be available in the [Wiki](https://github.com/superstrellaa/CinematicTools/wiki) (coming soon).
+> Documentation and examples will be available in the [Wiki](https://github.com/superstrellaa/CinematicTools/wiki).
 
 ---
 
