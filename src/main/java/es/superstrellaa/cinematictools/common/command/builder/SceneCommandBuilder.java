@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 
+import es.superstrellaa.cinematictools.client.CinematicToolsClient;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -91,6 +92,11 @@ public class SceneCommandBuilder {
             tp = Commands.argument("players", EntityArgument.players());
         
         tp.then(Commands.argument("index", IntegerArgumentType.integer(0)).executes(x -> {
+            if (!CinematicToolsClient.isOp) {
+                x.getSource().sendFailure(Component.translatable("commands.permission.failure"));
+                return 0;
+            }
+
             int index = IntegerArgumentType.getInteger(x, "index") - 1;
             CamScene scene = processor.getScene(x);
             if (index >= 0 && index < scene.points.size())
