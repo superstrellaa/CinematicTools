@@ -133,31 +133,46 @@ public class CinematicTools implements ModInitializer {
         npcCommand.then(Commands.literal("summon")
                 .then(Commands.argument("name", StringArgumentType.string())
                         .executes(context -> {
-                            CommandSourceStack source = context.getSource();
-                            String name = StringArgumentType.getString(context, "name");
-                            Vec3 position = source.getPosition();
-                            float yaw = source.getRotation().y;
-                            float pitch = source.getRotation().x;
-                            return summonNPC(source, name, position, yaw, pitch);
+                            if (context.getSource().hasPermission(2)) {
+                                CommandSourceStack source = context.getSource();
+                                String name = StringArgumentType.getString(context, "name");
+                                Vec3 position = source.getPosition();
+                                float yaw = source.getRotation().y;
+                                float pitch = source.getRotation().x;
+                                return summonNPC(source, name, position, yaw, pitch);
+                            } else {
+                                context.getSource().sendFailure(Component.translatable("commands.permission.failure"));
+                                return 0;
+                            }
                         })
                         .then(Commands.argument("pos", Vec3Argument.vec3())
                                 .executes(context -> {
-                                    CommandSourceStack source = context.getSource();
-                                    String name = StringArgumentType.getString(context, "name");
-                                    Vec3 position = Vec3Argument.getVec3(context, "pos");
-                                    float yaw = source.getRotation().y;
-                                    float pitch = source.getRotation().x;
-                                    return summonNPC(source, name, position, yaw, pitch);
+                                    if (context.getSource().hasPermission(2)) {
+                                        CommandSourceStack source = context.getSource();
+                                        String name = StringArgumentType.getString(context, "name");
+                                        Vec3 position = Vec3Argument.getVec3(context, "pos");
+                                        float yaw = source.getRotation().y;
+                                        float pitch = source.getRotation().x;
+                                        return summonNPC(source, name, position, yaw, pitch);
+                                    } else {
+                                        context.getSource().sendFailure(Component.translatable("commands.permission.failure"));
+                                        return 0;
+                                    }
                                 })
                                 .then(Commands.argument("yaw", FloatArgumentType.floatArg(-180, 180))
                                         .then(Commands.argument("pitch", FloatArgumentType.floatArg(-90, 90))
                                                 .executes(context -> {
-                                                    CommandSourceStack source = context.getSource();
-                                                    String name = StringArgumentType.getString(context, "name");
-                                                    Vec3 position = Vec3Argument.getVec3(context, "pos");
-                                                    float yaw = FloatArgumentType.getFloat(context, "yaw");
-                                                    float pitch = FloatArgumentType.getFloat(context, "pitch");
-                                                    return summonNPC(source, name, position, yaw, pitch);
+                                                    if (context.getSource().hasPermission(2)) {
+                                                        CommandSourceStack source = context.getSource();
+                                                        String name = StringArgumentType.getString(context, "name");
+                                                        Vec3 position = Vec3Argument.getVec3(context, "pos");
+                                                        float yaw = FloatArgumentType.getFloat(context, "yaw");
+                                                        float pitch = FloatArgumentType.getFloat(context, "pitch");
+                                                        return summonNPC(source, name, position, yaw, pitch);
+                                                    } else {
+                                                        context.getSource().sendFailure(Component.translatable("commands.permission.failure"));
+                                                        return 0;
+                                                    }
                                                 })
                                         )
                                 )
@@ -169,10 +184,15 @@ public class CinematicTools implements ModInitializer {
                 .then(Commands.argument("name", StringArgumentType.string())
                         .then(Commands.argument("pos", Vec3Argument.vec3())
                                 .executes(context -> {
-                                    CommandSourceStack source = context.getSource();
-                                    String name = StringArgumentType.getString(context, "name");
-                                    Vec3 position = Vec3Argument.getVec3(context, "pos");
-                                    return walkNPC(source, name, position);
+                                    if (context.getSource().hasPermission(2)) {
+                                        CommandSourceStack source = context.getSource();
+                                        String name = StringArgumentType.getString(context, "name");
+                                        Vec3 position = Vec3Argument.getVec3(context, "pos");
+                                        return walkNPC(source, name, position);
+                                    } else {
+                                        context.getSource().sendFailure(Component.translatable("commands.permission.failure"));
+                                        return 0;
+                                    }
                                 })
                         )
                 )
@@ -182,10 +202,15 @@ public class CinematicTools implements ModInitializer {
                 .then(Commands.argument("name", StringArgumentType.string())
                         .then(Commands.argument("pos", Vec3Argument.vec3())
                                 .executes(context -> {
-                                    CommandSourceStack source = context.getSource();
-                                    String name = StringArgumentType.getString(context, "name");
-                                    Vec3 position = Vec3Argument.getVec3(context, "pos");
-                                    return runNPC(source, name, position);
+                                    if (context.getSource().hasPermission(2)) {
+                                        CommandSourceStack source = context.getSource();
+                                        String name = StringArgumentType.getString(context, "name");
+                                        Vec3 position = Vec3Argument.getVec3(context, "pos");
+                                        return runNPC(source, name, position);
+                                    } else {
+                                        context.getSource().sendFailure(Component.translatable("commands.permission.failure"));
+                                        return 0;
+                                    }
                                 })
                         )
                 )
@@ -194,9 +219,14 @@ public class CinematicTools implements ModInitializer {
         npcCommand.then(Commands.literal("jump")
                 .then(Commands.argument("name", StringArgumentType.string())
                         .executes(context -> {
-                            CommandSourceStack source = context.getSource();
-                            String name = StringArgumentType.getString(context, "name");
-                            return jumpNPC(source, name);
+                            if (context.getSource().hasPermission(2)) {
+                                CommandSourceStack source = context.getSource();
+                                String name = StringArgumentType.getString(context, "name");
+                                return jumpNPC(source, name);
+                            } else {
+                                context.getSource().sendFailure(Component.translatable("commands.permission.failure"));
+                                return 0;
+                            }
                         })
                 )
         );
