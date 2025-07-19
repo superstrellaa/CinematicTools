@@ -33,13 +33,19 @@ It brings smooth camera paths, actor NPCs, and enhanced cinematic controls to mo
 
 ---
 
+## 🗃️ Source Code
+
+### The source code is available via the branches of this same repository.
+
+---
+
 ## 📦 Installation
 
 1. Install:
-    - [Fabric Loader](https://fabricmc.net/use/)
-    - [Fabric API](https://modrinth.com/mod/fabric-api)
-    - [GeckoLib](https://modrinth.com/mod/geckolib)
-    - [CreativeCore](https://modrinth.com/mod/creativecore)
+   - [Fabric Loader](https://fabricmc.net/use/)
+   - [Fabric API](https://modrinth.com/mod/fabric-api)
+   - [GeckoLib](https://modrinth.com/mod/geckolib)
+   - [CreativeCore](https://modrinth.com/mod/creativecore)
 2. Download the latest `.jar` from [Modrinth](https://modrinth.com/mod/cinematictools) or [CurseForge](https://curseforge.com/minecraft/mc-mods/cinematictools).
 3. Drop the `.jar` into your `mods` folder.
 4. Launch Minecraft and enjoy cinematic freedom!
