@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(EntityRenderDispatcher.class)
 public abstract class EntityRenderDispatcherMixin {
     @Inject(method = "renderHitbox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;renderLineBox(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/world/phys/AABB;FFFF)V", ordinal = 0, shift = At.Shift.AFTER))
-    private static void renderMultipartHitboxes(PoseStack pMatrixStack, VertexConsumer pBuffer, Entity entity, float pPartialTicks, CallbackInfo ci) {
+    private static void renderMultipartHitboxes(PoseStack pMatrixStack, VertexConsumer pBuffer, Entity entity, float pPartialTicks, float red, float green, float blue, CallbackInfo ci) {
         if (entity instanceof MultiPartEntity pEntity && pEntity.isMultipartEntity()) {
             double d0 = -Mth.lerp(pPartialTicks, entity.xOld, entity.getX());
             double d1 = -Mth.lerp(pPartialTicks, entity.yOld, entity.getY());

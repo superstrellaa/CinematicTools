@@ -5,6 +5,7 @@ import com.mojang.math.Axis;
 import io.github.fabricators_of_create.porting_lib.features.CameraExtensions;
 import io.github.fabricators_of_create.porting_lib.features.CameraSetupCallback;
 import net.minecraft.client.Camera;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.renderer.GameRenderer;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,11 +22,11 @@ public abstract class GameRendererMixin {
     private Camera mainCamera;
 
     @Inject(method = "renderLevel", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/client/Camera;setup(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/world/entity/Entity;ZZF)V"))
-    private void port_lib$modifyCameraInfo(float partialTicks, long l, PoseStack poseStack, CallbackInfo ci) {
+    private void port_lib$modifyCameraInfo(DeltaTracker deltaTracker, CallbackInfo ci) {
         Camera cam = this.mainCamera;
+        float partialTicks = deltaTracker.getGameTimeDeltaPartialTick(true);
         CameraSetupCallback.CameraInfo info = new CameraSetupCallback.CameraInfo((GameRenderer) (Object) this, cam, partialTicks, cam.getYRot(), cam.getXRot(), 0);
         CameraSetupCallback.EVENT.invoker().onCameraSetup(info);
         ((CameraExtensions) cam).setAnglesInternal(info.yaw, info.pitch);
-        poseStack.mulPose(Axis.ZP.rotationDegrees(info.roll));
     }
 }

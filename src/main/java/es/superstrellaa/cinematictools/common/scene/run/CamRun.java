@@ -7,8 +7,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import es.superstrellaa.cinematictools.client.CinematicToolsClient;
 import es.superstrellaa.cinematictools.client.SceneException;
 import es.superstrellaa.cinematictools.common.math.interpolation.CamPitchMode;
@@ -21,7 +21,7 @@ import es.superstrellaa.cinematictools.common.scene.attribute.CamAttribute;
 import es.superstrellaa.cinematictools.common.scene.timer.RealTimeTimer;
 import es.superstrellaa.cinematictools.common.scene.timer.RunTimer;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class CamRun {
     
     private static Minecraft mc = Minecraft.getInstance();

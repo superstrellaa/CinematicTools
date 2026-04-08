@@ -11,7 +11,7 @@ public final class MinecraftClientUtil {
     }
 
     public static float getRenderPartialTicksPaused(Minecraft minecraft) {
-        return get(minecraft).port_lib$pausePartialTick();
+        return get(minecraft).port_lib$getTimer().getGameTimeDeltaPartialTick(false);
     }
 
     private static MinecraftAccessor get(Minecraft minecraft) {

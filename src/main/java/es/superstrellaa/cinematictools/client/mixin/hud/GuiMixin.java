@@ -1,5 +1,6 @@
 package es.superstrellaa.cinematictools.client.mixin.hud;
 
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,14 +13,7 @@ import es.superstrellaa.cinematictools.client.CinematicToolsClient;
 public abstract class GuiMixin {
 
     @Inject(method = "renderEffects", at = @At("HEAD"), cancellable = true)
-    private void onRenderEffects(GuiGraphics graphics, CallbackInfo ci) {
-        if (CinematicToolsClient.isPlaying()) {
-            ci.cancel();
-        }
-    }
-
-    @Inject(method = "renderDemoOverlay", at = @At("HEAD"), cancellable = true)
-    private void onRenderOverlay(GuiGraphics graphics, CallbackInfo ci) {
+    private void onRenderEffects(GuiGraphics graphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         if (CinematicToolsClient.isPlaying()) {
             ci.cancel();
         }
@@ -46,8 +40,8 @@ public abstract class GuiMixin {
         }
     }
 
-    @Inject(method = "renderHotbar", at = @At("HEAD"), cancellable = true)
-    private void onRenderHotbar(float tickDelta, GuiGraphics graphics, CallbackInfo ci) {
+    @Inject(method = "renderHotbarAndDecorations", at = @At("HEAD"), cancellable = true)
+    private void onRenderHotbar(GuiGraphics graphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         if (CinematicToolsClient.isPlaying()) {
             ci.cancel();
         }
@@ -61,7 +55,7 @@ public abstract class GuiMixin {
     }
 
     @Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
-    private void onRenderCrosshair(GuiGraphics graphics, CallbackInfo ci) {
+    private void onRenderCrosshair(GuiGraphics graphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         if (CinematicToolsClient.isPlaying()) {
             ci.cancel();
         }

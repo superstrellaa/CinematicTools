@@ -3,8 +3,7 @@ package es.superstrellaa.cinematictools.common.math.interpolation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import es.superstrellaa.cinematictools.client.mixin.MinecraftAccessor;
 import org.apache.commons.lang3.ArrayUtils;
 import es.superstrellaa.cinematictools.common.scene.CamScene;
 import es.superstrellaa.cinematictools.common.scene.attribute.CamAttribute;
@@ -25,11 +24,10 @@ public class ClientCircularCamInterpolation extends CircularCamInterpolation{
     }
 
     @Environment(EnvType.CLIENT)
-    @OnlyIn(Dist.CLIENT)
     public <T extends VecNd> Interpolation<T> createClient(double[] timed, CamScene scene, T before, List<T> points, T after, CamAttribute<T> attribute) {
         return EnvExecutor.safeCallWhenOn(EnvType.CLIENT, () -> () -> {
             Minecraft mc = Minecraft.getInstance();
-            Vec3d center = scene.lookTarget.position(mc.level, mc.getDeltaFrameTime());
+            Vec3d center = scene.lookTarget.position(mc.level, ((MinecraftAccessor) mc).getTimer().getRealtimeDeltaTicks());
             if (center != null) {
                 List<Vec3d> points3 = (List<Vec3d>) points;
                 points.add(points.get(0));

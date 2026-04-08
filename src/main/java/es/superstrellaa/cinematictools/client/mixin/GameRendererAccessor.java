@@ -8,8 +8,8 @@ import net.minecraft.client.renderer.GameRenderer;
 
 @Mixin(GameRenderer.class)
 public interface GameRendererAccessor {
-    
+
     @Invoker
     public double callGetFov(Camera cam, float partialTickTime, boolean renderLevel);
-    
+
 }

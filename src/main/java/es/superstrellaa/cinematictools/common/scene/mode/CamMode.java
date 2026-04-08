@@ -1,11 +1,10 @@
 package es.superstrellaa.cinematictools.common.scene.mode;
 
 import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import es.superstrellaa.cinematictools.client.CamEventHandlerClient;
 import es.superstrellaa.cinematictools.common.math.point.CamPoint;
 import es.superstrellaa.cinematictools.common.scene.CamScene;
@@ -33,10 +32,10 @@ public abstract class CamMode {
         this.scene = scene;
     }
     
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void started(CamRun run) {}
     
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void finished(CamRun run) {
         EnvExecutor.safeRunWhenOn(EnvType.CLIENT, () -> () -> {
             CamEventHandlerClient.resetFOV();
@@ -44,10 +43,10 @@ public abstract class CamMode {
         });
     }
     
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public abstract Entity getCamera();
     
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void process(CamPoint point) {
         EnvExecutor.safeRunWhenOn(EnvType.CLIENT, () -> () -> {
             CamEventHandlerClient.roll((float) point.roll);
@@ -66,7 +65,7 @@ public abstract class CamMode {
     
     public abstract boolean outside();
     
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void correctTargetPosition(Vec3d vec) {}
     
 }

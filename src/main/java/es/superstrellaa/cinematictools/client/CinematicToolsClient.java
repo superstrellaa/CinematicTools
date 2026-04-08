@@ -4,10 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.github.fabricators_of_create.porting_lib.features.LevelExtensions;
-import io.github.fabricators_of_create.porting_lib.features.MinecraftClientUtil;
 import io.github.fabricators_of_create.porting_lib.features.entity.MultiPartEntity;
 import io.github.fabricators_of_create.porting_lib.features.entity.PartEntity;
-import io.netty.buffer.Unpooled;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
@@ -17,7 +15,6 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import es.superstrellaa.cinematictools.CinematicTools;
@@ -63,15 +60,14 @@ public class CinematicToolsClient implements ClientModInitializer {
     public static boolean isOp = false;
 
     public static void registerClientPackets() {
-        ClientPlayNetworking.registerGlobalReceiver(ModPackets.CHECK_OP_PACKET, (client, handler, buf, sender) -> {
-            boolean receivedOpStatus = buf.readBoolean();
-            client.execute(() -> isOp = receivedOpStatus);
+        ClientPlayNetworking.registerGlobalReceiver(ModPackets.CHECK_OP_TYPE, (payload, context) -> {
+            context.client().execute(() -> isOp = payload.isOp());
         });
     }
 
     public static void checkOpStatus() {
         if (mc.getConnection() != null) {
-            ClientPlayNetworking.send(ModPackets.CHECK_OP_PACKET, new FriendlyByteBuf(Unpooled.buffer()));
+            ClientPlayNetworking.send(new ModPackets.CheckOpPayload(false));
         }
     }
 
@@ -339,7 +335,7 @@ public class CinematicToolsClient implements ClientModInitializer {
         Minecraft mc = Minecraft.getInstance();
         mc.player.getAbilities().flying = true;
 
-        var partialTick = mc.isPaused() ? MinecraftClientUtil.getRenderPartialTicksPaused(mc) : ((MinecraftAccessor) mc).getTimer().partialTick;
+        var partialTick = ((MinecraftAccessor) mc).getTimer().getGameTimeDeltaPartialTick(!mc.isPaused());
         CamEventHandlerClient.roll((float) point.roll);
         CamEventHandlerClient.fov(point.zoom - CamEventHandlerClient.fovExactVanilla(partialTick));
         mc.player.absMoveTo(point.x, point.y, point.z, (float) point.rotationYaw, (float) point.rotationPitch);

@@ -14,6 +14,6 @@ public class NPCEntityRenderer extends GeoEntityRenderer<NPCEntity> {
     @Override
     public ResourceLocation getTextureLocation(NPCEntity entity) {
         return entity.getSkinTexture() != null ? entity.getSkinTexture() :
-                new ResourceLocation("cinematictools", "textures/entity/npc.png");
+                ResourceLocation.fromNamespaceAndPath("cinematictools", "textures/entity/npc.png");
     }
 }

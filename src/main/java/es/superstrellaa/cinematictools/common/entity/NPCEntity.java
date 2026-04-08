@@ -17,10 +17,9 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.level.Level;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.*;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.GeoAnimatable;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import es.superstrellaa.cinematictools.CinematicTools;
 
@@ -92,7 +91,7 @@ public class NPCEntity extends PathfinderMob implements GeoEntity {
 
     public ResourceLocation getSkinTexture() {
         if ("_SUIT".equals(this.getNPCName())) {
-            return new ResourceLocation("cinematictools", "textures/entity/npc.suit.png");
+            return ResourceLocation.fromNamespaceAndPath("cinematictools", "textures/entity/npc.suit.png");
         }
         return this.skinTexture;
     }
@@ -137,12 +136,12 @@ public class NPCEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(NAME, "");
-        this.entityData.define(SKIN_URL, "");
-        this.entityData.define(IS_RUNNING, false);
-        this.entityData.define(IS_JUMPING, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(NAME, "");
+        builder.define(SKIN_URL, "");
+        builder.define(IS_RUNNING, false);
+        builder.define(IS_JUMPING, false);
     }
 
     public void setRunning(boolean running) {

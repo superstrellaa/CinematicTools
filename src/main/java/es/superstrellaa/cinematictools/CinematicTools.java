@@ -24,7 +24,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import es.superstrellaa.cinematictools.common.command.argument.CamModeArgument;
@@ -50,13 +49,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-@Mod(value = CinematicTools.MODID)
 public class CinematicTools implements ModInitializer {
     
     public static final String MODID = "cinematictools";
 
     private static final Logger LOGGER = LogManager.getLogger(CinematicTools.MODID);
-    public static final CreativeNetwork NETWORK = new CreativeNetwork(1, LOGGER, new ResourceLocation(CinematicTools.MODID, "main"));
+    public static final CreativeNetwork NETWORK = new CreativeNetwork(1, LOGGER, ResourceLocation.fromNamespaceAndPath(CinematicTools.MODID, "main"));
     public static final CinematicToolsConfig CONFIG = new CinematicToolsConfig();
     public static final LazyRegistrar<ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES = LazyRegistrar.create(Registries.COMMAND_ARGUMENT_TYPE, MODID);
 
@@ -133,46 +131,31 @@ public class CinematicTools implements ModInitializer {
         npcCommand.then(Commands.literal("summon")
                 .then(Commands.argument("name", StringArgumentType.string())
                         .executes(context -> {
-                            if (context.getSource().hasPermission(2)) {
-                                CommandSourceStack source = context.getSource();
-                                String name = StringArgumentType.getString(context, "name");
-                                Vec3 position = source.getPosition();
-                                float yaw = source.getRotation().y;
-                                float pitch = source.getRotation().x;
-                                return summonNPC(source, name, position, yaw, pitch);
-                            } else {
-                                context.getSource().sendFailure(Component.translatable("commands.permission.failure"));
-                                return 0;
-                            }
+                            CommandSourceStack source = context.getSource();
+                            String name = StringArgumentType.getString(context, "name");
+                            Vec3 position = source.getPosition();
+                            float yaw = source.getRotation().y;
+                            float pitch = source.getRotation().x;
+                            return summonNPC(source, name, position, yaw, pitch);
                         })
                         .then(Commands.argument("pos", Vec3Argument.vec3())
                                 .executes(context -> {
-                                    if (context.getSource().hasPermission(2)) {
-                                        CommandSourceStack source = context.getSource();
-                                        String name = StringArgumentType.getString(context, "name");
-                                        Vec3 position = Vec3Argument.getVec3(context, "pos");
-                                        float yaw = source.getRotation().y;
-                                        float pitch = source.getRotation().x;
-                                        return summonNPC(source, name, position, yaw, pitch);
-                                    } else {
-                                        context.getSource().sendFailure(Component.translatable("commands.permission.failure"));
-                                        return 0;
-                                    }
+                                    CommandSourceStack source = context.getSource();
+                                    String name = StringArgumentType.getString(context, "name");
+                                    Vec3 position = Vec3Argument.getVec3(context, "pos");
+                                    float yaw = source.getRotation().y;
+                                    float pitch = source.getRotation().x;
+                                    return summonNPC(source, name, position, yaw, pitch);
                                 })
                                 .then(Commands.argument("yaw", FloatArgumentType.floatArg(-180, 180))
                                         .then(Commands.argument("pitch", FloatArgumentType.floatArg(-90, 90))
                                                 .executes(context -> {
-                                                    if (context.getSource().hasPermission(2)) {
-                                                        CommandSourceStack source = context.getSource();
-                                                        String name = StringArgumentType.getString(context, "name");
-                                                        Vec3 position = Vec3Argument.getVec3(context, "pos");
-                                                        float yaw = FloatArgumentType.getFloat(context, "yaw");
-                                                        float pitch = FloatArgumentType.getFloat(context, "pitch");
-                                                        return summonNPC(source, name, position, yaw, pitch);
-                                                    } else {
-                                                        context.getSource().sendFailure(Component.translatable("commands.permission.failure"));
-                                                        return 0;
-                                                    }
+                                                    CommandSourceStack source = context.getSource();
+                                                    String name = StringArgumentType.getString(context, "name");
+                                                    Vec3 position = Vec3Argument.getVec3(context, "pos");
+                                                    float yaw = FloatArgumentType.getFloat(context, "yaw");
+                                                    float pitch = FloatArgumentType.getFloat(context, "pitch");
+                                                    return summonNPC(source, name, position, yaw, pitch);
                                                 })
                                         )
                                 )
@@ -184,15 +167,10 @@ public class CinematicTools implements ModInitializer {
                 .then(Commands.argument("name", StringArgumentType.string())
                         .then(Commands.argument("pos", Vec3Argument.vec3())
                                 .executes(context -> {
-                                    if (context.getSource().hasPermission(2)) {
-                                        CommandSourceStack source = context.getSource();
-                                        String name = StringArgumentType.getString(context, "name");
-                                        Vec3 position = Vec3Argument.getVec3(context, "pos");
-                                        return walkNPC(source, name, position);
-                                    } else {
-                                        context.getSource().sendFailure(Component.translatable("commands.permission.failure"));
-                                        return 0;
-                                    }
+                                    CommandSourceStack source = context.getSource();
+                                    String name = StringArgumentType.getString(context, "name");
+                                    Vec3 position = Vec3Argument.getVec3(context, "pos");
+                                    return walkNPC(source, name, position);
                                 })
                         )
                 )
@@ -202,15 +180,10 @@ public class CinematicTools implements ModInitializer {
                 .then(Commands.argument("name", StringArgumentType.string())
                         .then(Commands.argument("pos", Vec3Argument.vec3())
                                 .executes(context -> {
-                                    if (context.getSource().hasPermission(2)) {
-                                        CommandSourceStack source = context.getSource();
-                                        String name = StringArgumentType.getString(context, "name");
-                                        Vec3 position = Vec3Argument.getVec3(context, "pos");
-                                        return runNPC(source, name, position);
-                                    } else {
-                                        context.getSource().sendFailure(Component.translatable("commands.permission.failure"));
-                                        return 0;
-                                    }
+                                    CommandSourceStack source = context.getSource();
+                                    String name = StringArgumentType.getString(context, "name");
+                                    Vec3 position = Vec3Argument.getVec3(context, "pos");
+                                    return runNPC(source, name, position);
                                 })
                         )
                 )
@@ -219,14 +192,9 @@ public class CinematicTools implements ModInitializer {
         npcCommand.then(Commands.literal("jump")
                 .then(Commands.argument("name", StringArgumentType.string())
                         .executes(context -> {
-                            if (context.getSource().hasPermission(2)) {
-                                CommandSourceStack source = context.getSource();
-                                String name = StringArgumentType.getString(context, "name");
-                                return jumpNPC(source, name);
-                            } else {
-                                context.getSource().sendFailure(Component.translatable("commands.permission.failure"));
-                                return 0;
-                            }
+                            CommandSourceStack source = context.getSource();
+                            String name = StringArgumentType.getString(context, "name");
+                            return jumpNPC(source, name);
                         })
                 )
         );

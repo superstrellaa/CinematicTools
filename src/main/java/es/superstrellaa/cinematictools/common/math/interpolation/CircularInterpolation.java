@@ -1,6 +1,7 @@
 package es.superstrellaa.cinematictools.common.math.interpolation;
 
 import net.minecraft.client.Minecraft;
+import es.superstrellaa.cinematictools.client.mixin.MinecraftAccessor;
 import es.superstrellaa.cinematictools.common.target.CamTarget;
 import team.creative.creativecore.common.util.math.interpolation.HermiteInterpolation;
 import team.creative.creativecore.common.util.math.matrix.Matrix3;
@@ -29,7 +30,7 @@ public class CircularInterpolation extends HermiteInterpolation<Vec3d> {
     @Override
     public Vec3d valueAt(double t) {
         Minecraft mc = Minecraft.getInstance();
-        Vec3d center = target.position(mc.level, mc.getDeltaFrameTime());
+        Vec3d center = target.position(mc.level, ((MinecraftAccessor) mc).getTimer().getRealtimeDeltaTicks());
         if (center != null) {
             Vec3d centerPoint = new Vec3d(center.x, center.y, center.z);
 

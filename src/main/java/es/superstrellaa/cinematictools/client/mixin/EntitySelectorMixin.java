@@ -11,6 +11,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -42,7 +43,7 @@ public abstract class EntitySelectorMixin implements EntitySelectorClient {
     private boolean worldLimited;
     @Shadow
     @Final
-    private Predicate<Entity> predicate;
+    private List<Predicate<Entity>> contextFreePredicates;
     @Shadow
     @Final
     private MinMaxBounds.Doubles range;
@@ -82,7 +83,7 @@ public abstract class EntitySelectorMixin implements EntitySelectorClient {
     }
 
     @Shadow
-    private Predicate<Entity> getPredicate(Vec3 vec) {
+    private Predicate<Entity> getPredicate(Vec3 vec, @Nullable AABB aabb, FeatureFlagSet featureFlags) {
         return null;
     }
 
@@ -92,6 +93,12 @@ public abstract class EntitySelectorMixin implements EntitySelectorClient {
     @Shadow
     private <T extends Entity> List<T> sortAndLimit(Vec3 vec, List<T> list) {
         return null;
+    }
+
+    @Unique
+    private Predicate<Entity> getPredicateClient(Vec3 vec3, ClientLevel level) {
+        AABB absoluteAabb = this.aabb != null ? this.aabb.move(vec3) : null;
+        return this.getPredicate(vec3, absoluteAabb, level.enabledFeatures());
     }
 
     @Override
@@ -124,12 +131,11 @@ public abstract class EntitySelectorMixin implements EntitySelectorClient {
         }
 
         Vec3 vec3 = this.position.apply(source.getPosition());
-        Predicate<Entity> predicate = this.getPredicate(vec3);
+        ClientLevel level = (ClientLevel) source.getWorld();
+        Predicate<Entity> predicate = this.getPredicateClient(vec3, level);
         if (this.currentEntity)
             return (List<? extends Entity>) (source.getEntity() != null && predicate.test(source.getEntity()) ? Lists.newArrayList(source.getEntity()) : Collections.emptyList());
         List<Entity> list = Lists.newArrayList();
-
-        ClientLevel level = (ClientLevel) source.getWorld();
 
         if (this.aabb != null)
             list.addAll(level.getEntities(this.type, this.aabb.move(vec3), predicate));
@@ -171,7 +177,8 @@ public abstract class EntitySelectorMixin implements EntitySelectorClient {
         }
 
         Vec3 vec3 = this.position.apply(source.getPosition());
-        Predicate<Entity> predicate = this.getPredicate(vec3);
+        ClientLevel level = (ClientLevel) source.getWorld();
+        Predicate<Entity> predicate = this.getPredicateClient(vec3, level);
         if (this.currentEntity) {
             if (source.getEntity() instanceof Player player && predicate.test(player))
                 return Lists.newArrayList(player);
