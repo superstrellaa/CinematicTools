@@ -9,7 +9,7 @@
   <a href="https://github.com/superstrellaa/CinematicTools/releases">
     <img src="https://img.shields.io/github/v/release/superstrellaa/CinematicTools?style=flat-square" />
   </a>
-  <img src="https://img.shields.io/badge/Minecraft-1.20.1%20%7C%201.20.4-blue?style=flat-square" />
+  <img src="https://img.shields.io/badge/Minecraft-1.20.1%20%7C%201.20.4%20%7C%201.21.1-blue?style=flat-square" />
   <img src="https://img.shields.io/badge/Loader-Fabric-blueviolet?style=flat-square" />
   <a href="https://github.com/superstrellaa/CinematicTools/issues">
     <img src="https://img.shields.io/github/issues/superstrellaa/CinematicTools?style=flat-square" />
@@ -28,6 +28,7 @@ It brings smooth camera paths, actor NPCs, and enhanced cinematic controls to mo
 
 - Minecraft `1.20.1`
 - Minecraft `1.20.4`
+- Minecraft `1.21.1` (thanks to https://github.com/IceGames23)
 
 > Support for newer versions may come later depending on demand and stability.
 
@@ -67,6 +68,7 @@ It brings smooth camera paths, actor NPCs, and enhanced cinematic controls to mo
 
 - Original mod by [CreativeMD](https://github.com/CreativeMD)
 - Fabric port & development by [superstrellaa](https://superstrellaa.is-a.dev)
+- Contributors: [IceGames23](https://github.com/IceGames23) (Minecraft 1.21.1 support)
 
 ---
 
